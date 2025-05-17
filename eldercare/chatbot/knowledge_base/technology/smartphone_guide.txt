@@ -1,0 +1,136 @@
+# Guide d'Utilisation des Smartphones pour Seniors
+
+## Fonctions de Base
+
+### Allumer et Éteindre
+- **Allumer**: Appuyez sur le bouton d'alimentation (généralement sur le côté droit) pendant 2-3 secondes
+- **Éteindre**: Appuyez sur le bouton d'alimentation pendant 2-3 secondes, puis touchez "Éteindre" sur l'écran
+- **Mode veille**: Appuyez brièvement sur le bouton d'alimentation pour mettre en veille ou réveiller
+
+### Naviguer sur l'Écran
+- **Toucher**: Tapez une fois sur une icône pour l'ouvrir
+- **Glisser**: Posez votre doigt et faites-le glisser pour faire défiler
+- **Pincer/Écarter**: Utilisez deux doigts pour zoomer (écarter) ou dézoomer (pincer)
+- **Retour**: Sur Android, utilisez la flèche retour en bas; sur iPhone, balayez depuis le bord gauche
+
+### Personnaliser l'Affichage
+- **Agrandir le texte**: 
+  - Android: Paramètres > Affichage > Taille du texte
+  - iPhone: Réglages > Accessibilité > Taille du texte et des éléments
+- **Augmenter la luminosité**: 
+  - Faites glisser du haut vers le bas de l'écran et ajustez la barre de luminosité
+- **Mode nuit/sombre**: 
+  - Réduit la lumière bleue le soir pour améliorer le sommeil
+  - Accessible dans les paramètres ou le panneau des raccourcis
+
+## Applications Essentielles
+
+### Téléphone
+- **Passer un appel**: Ouvrez l'application Téléphone, composez le numéro ou sélectionnez un contact
+- **Répondre**: Faites glisser le bouton vert lorsqu'un appel arrive
+- **Refuser**: Faites glisser le bouton rouge
+- **Haut-parleur**: Pendant un appel, touchez l'icône du haut-parleur
+- **Enregistrer un contact**: 
+  1. Ouvrez l'application Contacts
+  2. Touchez le "+" pour ajouter
+  3. Remplissez les champs et appuyez sur Enregistrer
+
+### Messages (SMS)
+- **Envoyer un message**: 
+  1. Ouvrez l'application Messages
+  2. Touchez le symbole "+" ou "Nouveau message"
+  3. Sélectionnez un destinataire ou saisissez un numéro
+  4. Écrivez votre message et appuyez sur Envoyer
+- **Joindre une photo**: Touchez l'icône de trombone ou "+" lors de la rédaction d'un message
+- **Utiliser des émojis**: Touchez le symbole de smiley sur le clavier
+
+### WhatsApp
+- **Installation**: 
+  1. Ouvrez le Play Store (Android) ou l'App Store (iPhone)
+  2. Recherchez "WhatsApp" et touchez "Installer"
+  3. Ouvrez l'application et suivez les instructions de configuration
+- **Envoyer un message**: 
+  1. Ouvrez WhatsApp
+  2. Touchez l'onglet Discussions puis l'icône de message
+  3. Sélectionnez un contact et écrivez votre message
+- **Appel vidéo**: 
+  1. Ouvrez une discussion
+  2. Touchez l'icône de caméra en haut à droite
+
+### Appareil Photo
+- **Prendre une photo**: 
+  1. Ouvrez l'application Appareil photo
+  2. Cadrez votre sujet
+  3. Appuyez sur le bouton rond en bas
+- **Voir vos photos**: Touchez la miniature dans le coin de l'écran de l'appareil photo
+- **Partager une photo**: 
+  1. Ouvrez l'image dans la Galerie
+  2. Touchez l'icône de partage (généralement une flèche)
+  3. Choisissez l'application pour partager
+
+## Internet et Email
+
+### Naviguer sur Internet
+- **Ouvrir le navigateur**: Touchez Chrome (Android) ou Safari (iPhone)
+- **Rechercher**: 
+  1. Tapez dans la barre d'adresse en haut
+  2. Saisissez votre requête et appuyez sur Entrée
+- **Favoris**: 
+  1. Sur la page souhaitée, touchez l'icône d'étoile ou de menu
+  2. Sélectionnez "Ajouter aux favoris"
+
+### Configurer et Utiliser l'Email
+- **Configuration initiale**:
+  1. Ouvrez l'application Gmail ou Mail
+  2. Suivez les instructions pour ajouter votre compte
+- **Lire les emails**: Touchez simplement sur un email pour l'ouvrir
+- **Répondre**: Touchez l'icône de flèche en bas d'un email
+- **Nouveau message**: 
+  1. Touchez l'icône "+" ou "Composer"
+  2. Remplissez les champs destinataire, objet et corps du message
+  3. Touchez Envoyer
+
+## Réglages Importants
+
+### Wi-Fi et Données Mobiles
+- **Se connecter au Wi-Fi**: 
+  1. Allez dans Paramètres > Wi-Fi
+  2. Activez le Wi-Fi si nécessaire
+  3. Sélectionnez votre réseau et entrez le mot de passe
+- **Données mobiles**: 
+  - Activez-les dans Paramètres > Réseau & Internet > Données mobiles
+
+### Batterie et Économie d'Énergie
+- **Vérifier le niveau**: Regardez l'icône en haut de l'écran
+- **Économiser la batterie**: 
+  - Baissez la luminosité
+  - Désactivez le Wi-Fi et le Bluetooth quand vous ne les utilisez pas
+  - Activez le mode économie d'énergie dans les paramètres
+
+### Mises à Jour
+- **Mettre à jour le système**: 
+  1. Allez dans Paramètres > Système > Mises à jour
+  2. Touchez "Rechercher des mises à jour"
+- **Mettre à jour les applications**: 
+  1. Ouvrez le Play Store ou l'App Store
+  2. Allez dans Mes applications ou Mises à jour
+
+## Résolution des Problèmes Courants
+
+### Redémarrer l'Appareil
+- Solution à de nombreux problèmes temporaires
+- Appuyez sur le bouton d'alimentation et sélectionnez "Redémarrer"
+
+### Écran Figé
+1. Appuyez longuement sur le bouton d'alimentation (10 secondes)
+2. Relâchez quand l'appareil s'éteint
+3. Rallumez normalement
+
+### Espace de Stockage Insuffisant
+- **Vérifier l'espace**: 
+  - Android: Paramètres > Stockage
+  - iPhone: Réglages > Général > iPhone Storage
+- **Libérer de l'espace**: 
+  - Supprimez les applications inutilisées
+  - Transférez les photos vers un ordinateur ou le cloud
+  - Videz la corbeille des applications (Photos, Gmail) 

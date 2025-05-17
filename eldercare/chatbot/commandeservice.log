@@ -1,0 +1,137 @@
+2025-05-12 03:56:11,220 - __main__ - INFO - Command service initialized for platform: win32
+2025-05-12 03:56:40,254 - __main__ - INFO - Commande exécutée avec succès: start calc
+2025-05-12 03:56:57,960 - __main__ - ERROR - Erreur: 
+2025-05-12 03:56:58,610 - __main__ - INFO - Arrêt du service de commandes
+2025-05-12 03:57:03,621 - commande_service - INFO - Command service initialized for platform: win32
+2025-05-12 03:57:03,874 - azure_llm_integration - INFO - Azure LLM client initialized with model openai/gpt-4.1
+2025-05-12 03:57:07,134 - __main__ - INFO - Intention détectée : salutation, Paramètres : ['salut']
+2025-05-12 03:57:19,132 - azure.core.pipeline.policies.http_logging_policy - INFO - Request URL: 'https://models.github.ai/inference/chat/completions?api-version=REDACTED'
+Request method: 'POST'
+Request headers:
+    'Content-Type': 'application/json'
+    'Content-Length': '1281'
+    'Accept': 'application/json'
+    'x-ms-client-request-id': 'd184fc68-2edc-11f0-a9dd-b44506a4b9a3'
+    'api-key': 'REDACTED'
+    'User-Agent': 'azsdk-python-ai-inference/1.0.0b9 Python/3.13.3 (Windows-11-10.0.26100-SP0)'
+    'Authorization': 'REDACTED'
+A body is sent with the request
+2025-05-12 03:57:20,394 - azure.core.pipeline.policies.http_logging_policy - INFO - Response status: 429
+Response headers:
+    'azureml-served-by-cluster': 'REDACTED'
+    'Content-Type': 'application/json; charset=utf-8'
+    'Date': 'Mon, 12 May 2025 02:57:20 GMT'
+    'request-context': 'REDACTED'
+    'Retry-After': '56723'
+    'Server': 'models-gateway'
+    'Strict-Transport-Security': 'REDACTED'
+    'Vary': 'REDACTED'
+    'X-Content-Type-Options': 'REDACTED'
+    'x-ms-error-code': 'RateLimitReached'
+    'x-ratelimit-timeremaining': 'REDACTED'
+    'x-ratelimit-type': 'REDACTED'
+    'x-request-time': 'REDACTED'
+    'Content-Length': '265'
+    'x-github-backend': 'REDACTED'
+    'X-GitHub-Request-Id': 'REDACTED'
+2025-05-12 03:59:06,972 - commande_service - INFO - Command service initialized for platform: win32
+2025-05-12 03:59:07,182 - azure_llm_integration - INFO - Azure LLM client initialized with model openai/gpt-4.1
+2025-05-12 03:59:10,465 - __main__ - INFO - Intention détectée : salutation, Paramètres : ['hey']
+2025-05-12 03:59:14,107 - azure.core.pipeline.policies.http_logging_policy - INFO - Request URL: 'https://models.github.ai/inference/chat/completions?api-version=REDACTED'
+Request method: 'POST'
+Request headers:
+    'Content-Type': 'application/json'
+    'Content-Length': '1248'
+    'Accept': 'application/json'
+    'x-ms-client-request-id': '160cbb6d-2edd-11f0-8632-b44506a4b9a3'
+    'api-key': 'REDACTED'
+    'User-Agent': 'azsdk-python-ai-inference/1.0.0b9 Python/3.13.3 (Windows-11-10.0.26100-SP0)'
+    'Authorization': 'REDACTED'
+A body is sent with the request
+2025-05-12 03:59:15,295 - azure.core.pipeline.policies.http_logging_policy - INFO - Response status: 429
+Response headers:
+    'azureml-served-by-cluster': 'REDACTED'
+    'Content-Type': 'application/json; charset=utf-8'
+    'Date': 'Mon, 12 May 2025 02:59:15 GMT'
+    'request-context': 'REDACTED'
+    'Retry-After': '56608'
+    'Server': 'models-gateway'
+    'Strict-Transport-Security': 'REDACTED'
+    'Vary': 'REDACTED'
+    'X-Content-Type-Options': 'REDACTED'
+    'x-ms-error-code': 'RateLimitReached'
+    'x-ratelimit-timeremaining': 'REDACTED'
+    'x-ratelimit-type': 'REDACTED'
+    'x-request-time': 'REDACTED'
+    'Content-Length': '265'
+    'x-github-backend': 'REDACTED'
+    'X-GitHub-Request-Id': 'REDACTED'
+2025-05-12 04:04:20,512 - commande_service - INFO - Command service initialized for platform: win32
+2025-05-12 04:04:20,722 - azure_llm_integration - INFO - Azure LLM client initialized with model openai/gpt-4.1
+2025-05-12 04:04:23,426 - __main__ - INFO - Intention détectée : salutation, Paramètres : ['hey']
+2025-05-12 04:04:30,947 - azure.core.pipeline.policies.http_logging_policy - INFO - Request URL: 'https://models.github.ai/inference/chat/completions?api-version=REDACTED'
+Request method: 'POST'
+Request headers:
+    'Content-Type': 'application/json'
+    'Content-Length': '1263'
+    'Accept': 'application/json'
+    'x-ms-client-request-id': 'd2e6be67-2edd-11f0-8a22-b44506a4b9a3'
+    'api-key': 'REDACTED'
+    'User-Agent': 'azsdk-python-ai-inference/1.0.0b9 Python/3.13.3 (Windows-11-10.0.26100-SP0)'
+    'Authorization': 'REDACTED'
+A body is sent with the request
+2025-05-12 04:04:31,905 - azure.core.pipeline.policies.http_logging_policy - INFO - Response status: 429
+Response headers:
+    'azureml-served-by-cluster': 'REDACTED'
+    'Content-Type': 'application/json; charset=utf-8'
+    'Date': 'Mon, 12 May 2025 03:04:32 GMT'
+    'request-context': 'REDACTED'
+    'Retry-After': '56292'
+    'Server': 'models-gateway'
+    'Strict-Transport-Security': 'REDACTED'
+    'Vary': 'REDACTED'
+    'X-Content-Type-Options': 'REDACTED'
+    'x-ms-error-code': 'RateLimitReached'
+    'x-ratelimit-timeremaining': 'REDACTED'
+    'x-ratelimit-type': 'REDACTED'
+    'x-request-time': 'REDACTED'
+    'Content-Length': '265'
+    'x-github-backend': 'REDACTED'
+    'X-GitHub-Request-Id': 'REDACTED'
+2025-05-12 04:13:42,491 - commande_service - INFO - Command service initialized for platform: win32
+2025-05-12 04:13:42,721 - azure_llm_integration - INFO - Azure LLM client initialized with model openai/gpt-4.1
+2025-05-12 04:13:45,975 - __main__ - INFO - Intention détectée : salutation, Paramètres : ['hey']
+2025-05-12 04:13:50,486 - azure.core.pipeline.policies.http_logging_policy - INFO - Request URL: 'https://models.github.ai/inference/chat/completions?api-version=REDACTED'
+Request method: 'POST'
+Request headers:
+    'Content-Type': 'application/json'
+    'Content-Length': '1248'
+    'Accept': 'application/json'
+    'x-ms-client-request-id': '2069890a-2edf-11f0-bdd0-b44506a4b9a3'
+    'api-key': 'REDACTED'
+    'User-Agent': 'azsdk-python-ai-inference/1.0.0b9 Python/3.13.3 (Windows-11-10.0.26100-SP0)'
+    'Authorization': 'REDACTED'
+A body is sent with the request
+2025-05-12 04:13:51,572 - azure.core.pipeline.policies.http_logging_policy - INFO - Response status: 429
+Response headers:
+    'azureml-served-by-cluster': 'REDACTED'
+    'Content-Type': 'application/json; charset=utf-8'
+    'Date': 'Mon, 12 May 2025 03:13:51 GMT'
+    'request-context': 'REDACTED'
+    'Retry-After': '55732'
+    'Server': 'models-gateway'
+    'Strict-Transport-Security': 'REDACTED'
+    'Vary': 'REDACTED'
+    'X-Content-Type-Options': 'REDACTED'
+    'x-ms-error-code': 'RateLimitReached'
+    'x-ratelimit-timeremaining': 'REDACTED'
+    'x-ratelimit-type': 'REDACTED'
+    'x-request-time': 'REDACTED'
+    'Content-Length': '265'
+    'x-github-backend': 'REDACTED'
+    'X-GitHub-Request-Id': 'REDACTED'
+2025-05-12 04:24:22,591 - commande_service - INFO - Command service initialized for platform: win32
+2025-05-12 04:24:22,777 - azure_llm_integration - INFO - Azure LLM client initialized with model openai/gpt-4.1
+2025-05-12 04:24:27,083 - eldercare_complete - INFO - Intention détectée : salutation, Paramètres : ['salut']
+2025-05-12 04:24:33,571 - eldercare_complete - INFO - Intention détectée : ouvrir_application, Paramètres : ['google']
+2025-05-12 04:24:48,033 - eldercare_complete - INFO - Intention détectée : ouvrir_application, Paramètres : ['google']

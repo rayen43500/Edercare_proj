@@ -1,0 +1,28 @@
+<svg width="200" height="200" viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background Circle -->
+  <circle cx="100" cy="100" r="95" fill="#4e7fa9" />
+  <circle cx="100" cy="100" r="85" fill="white" />
+  
+  <!-- Heart with subtle gradient -->
+  <path d="M100 140C98 140 96 139.5 94.5 138.5C81.5 129 61 110.5 61 90C61 75.5 72 64 86 64C93 64 99.5 67.5 104 73C108.5 67.5 115 64 122 64C136 64 147 75.5 147 90C147 110.5 126.5 129 113.5 138.5C112 139.5 110 140 108 140H100Z" fill="url(#heartGradient)" />
+  
+  <!-- Caring Hand -->
+  <path d="M65 95C65 95 75 75 95 80C115 85 125 95 125 95" stroke="#4e7fa9" stroke-width="5" stroke-linecap="round" />
+  
+  <!-- Decorative Circles -->
+  <circle cx="60" cy="120" r="8" fill="#c0d6df" />
+  <circle cx="140" cy="120" r="8" fill="#c0d6df" />
+  <circle cx="50" cy="100" r="5" fill="#c0d6df" />
+  <circle cx="150" cy="100" r="5" fill="#c0d6df" />
+  
+  <!-- Text -->
+  <path d="M85 160C85 160 88 155 100 155C112 155 115 160 115 160" stroke="#4e7fa9" stroke-width="3" stroke-linecap="round" />
+  
+  <!-- Gradients -->
+  <defs>
+    <linearGradient id="heartGradient" x1="61" y1="64" x2="147" y2="140" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#ff7f7f" />
+      <stop offset="1" stop-color="#ff5252" />
+    </linearGradient>
+  </defs>
+</svg>

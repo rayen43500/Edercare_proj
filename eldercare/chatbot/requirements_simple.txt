@@ -1,0 +1,4 @@
+# Dépendances requises minimales pour l'assistant textuel
+# Aucune dépendance externe n'est nécessaire car nous n'utilisons que des modules Python standards
+# Aucune dépendance externe requise
+# Le service de commandes utilise uniquement les modules Python standard 

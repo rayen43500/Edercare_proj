@@ -1,15 +1,71 @@
 import React, { useState, useEffect, useRef } from 'react';
 import './App.css';
+import elderCareApi from './services/eldercare-api';
 
 function App() {
   const [message, setMessage] = useState('');
   const [conversation, setConversation] = useState<{text: string, sender: string, speaking?: boolean}[]>([
-    {text: "Bonjour, je suis votre assistant IA pour les soins aux personnes âgées. Comment puis-je vous aider aujourd'hui?", sender: 'ai', speaking: false}
+    {text: "Bonjour, je suis votre assistant ElderCare. Comment puis-je vous aider aujourd'hui?", sender: 'ai', speaking: false}
   ]);
   const [isRecording, setIsRecording] = useState(false);
   const conversationEndRef = useRef<HTMLDivElement>(null);
   const [isTyping, setIsTyping] = useState(false);
   const [showFloatingMic, setShowFloatingMic] = useState(false);
+  const [apiInitialized, setApiInitialized] = useState(false);
+  const [initializationError, setInitializationError] = useState<string | null>(null);
+  const [retryCount, setRetryCount] = useState(0);
+  const maxRetries = 3;
+
+  // Initialiser l'API au chargement
+  useEffect(() => {
+    const initializeApi = async () => {
+      try {
+        setIsTyping(true);
+        
+        // Vérifier si l'API est déjà initialisée
+        const healthCheck = await elderCareApi.checkHealth();
+        
+        if (healthCheck.status === "error") {
+          console.error("Échec de la vérification de l'état de l'API");
+          setInitializationError("Le serveur ne répond pas. Veuillez réessayer plus tard.");
+          setApiInitialized(false);
+          return;
+        }
+        
+        if (!healthCheck.initialized) {
+          const initResult = await elderCareApi.initializeAssistant();
+          setApiInitialized(initResult.status === 'success');
+          
+          if (initResult.status !== 'success') {
+            setInitializationError(initResult.message || 'Erreur d\'initialisation');
+          }
+        } else {
+          setApiInitialized(true);
+          console.log("API déjà initialisée");
+        }
+      } catch (error) {
+        console.error('Erreur lors de la connexion à l\'API:', error);
+        setInitializationError('Impossible de se connecter à l\'API ElderCare');
+      } finally {
+        setIsTyping(false);
+      }
+    };
+
+    initializeApi();
+    
+    // Retry logic
+    const retryInterval = setInterval(() => {
+      if (!apiInitialized && retryCount < maxRetries) {
+        setRetryCount(prev => prev + 1);
+        console.log(`Tentative de reconnexion ${retryCount + 1}/${maxRetries}...`);
+        initializeApi();
+      } else {
+        clearInterval(retryInterval);
+      }
+    }, 5000);
+    
+    return () => clearInterval(retryInterval);
+  }, [apiInitialized, retryCount]);
 
   // Scroll to bottom of conversation when messages are added
   useEffect(() => {
@@ -43,49 +99,72 @@ function App() {
     };
   }, []);
 
-  // Simulating AI thinking effect
-  useEffect(() => {
-    if (isTyping) {
-      const timer = setTimeout(() => {
-        const aiResponses = [
-          "Je comprends votre préoccupation. Voici quelques suggestions qui pourraient vous aider...",
-          "D'après mon analyse, je recommanderais les actions suivantes...",
-          "Merci pour ces informations. Avez-vous essayé les approches suivantes?",
-          "Je suis là pour vous aider. Pourriez-vous me donner plus de détails?",
-          "Votre attention aux soins est admirable. Voici quelques ressources utiles..."
-        ];
-        
-        const randomResponse = aiResponses[Math.floor(Math.random() * aiResponses.length)];
-        const newAiMessage = {text: randomResponse, sender: 'ai', speaking: true};
-        setConversation(prev => [...prev, newAiMessage]);
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (message.trim() === '') return;
+    
+    // Add user message to conversation
+    const userMessage = message;
+    setConversation(prev => [...prev, {text: userMessage, sender: 'user'}]);
+    
+    // Clear input
+    setMessage('');
+    
+    // Show AI is typing indicator
+    setIsTyping(true);
+    
+    try {
+      // Send message to API
+      const response = await elderCareApi.sendMessage(userMessage);
+      
+      if (response.status === 'success') {
+        // Add AI response to conversation
+        const aiMessage = {text: response.response, sender: 'ai', speaking: true};
+        setConversation(prev => [...prev, aiMessage]);
         
         // Stop speaking animation after 3 seconds
         setTimeout(() => {
           setConversation(prev => 
             prev.map(msg => 
-              msg === newAiMessage ? {...msg, speaking: false} : msg
+              msg === aiMessage ? {...msg, speaking: false} : msg
             )
           );
         }, 3000);
         
-        setIsTyping(false);
-      }, 1500);
+        // If API was not initialized before, it is now
+        if (!apiInitialized) {
+          setApiInitialized(true);
+          setInitializationError(null);
+        }
+      } else {
+        // Handle error in response
+        throw new Error(response.message || "Erreur lors du traitement du message");
+      }
+    } catch (error) {
+      console.error('Erreur lors de l\'envoi du message:', error);
       
-      return () => clearTimeout(timer);
+      // Add error message
+      let errorMessage = "Désolé, je n'ai pas pu traiter votre message. Veuillez réessayer plus tard.";
+      
+      if (error instanceof Error) {
+        errorMessage = error.message;
+      }
+      
+      setConversation(prev => [...prev, {
+        text: errorMessage,
+        sender: 'ai'
+      }]);
+      
+      // If we get an error, check API health
+      try {
+        const healthCheck = await elderCareApi.checkHealth();
+        setApiInitialized(healthCheck.initialized);
+      } catch (e) {
+        setApiInitialized(false);
+      }
+    } finally {
+      setIsTyping(false);
     }
-  }, [isTyping]);
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (message.trim() === '') return;
-    
-    // Add user message to conversation
-    setConversation([...conversation, {text: message, sender: 'user'}]);
-    
-    // Show AI is typing indicator
-    setIsTyping(true);
-    
-    setMessage('');
   };
 
   const toggleRecording = () => {
@@ -100,9 +179,77 @@ function App() {
         const voiceMessage = "Voici mon message vocal pour l'assistant...";
         setConversation(prev => [...prev, {text: voiceMessage, sender: 'user'}]);
         
-        // Show AI is typing indicator
-        setIsTyping(true);
+        // Process message as if it was typed
+        handleVoiceMessage(voiceMessage);
       }, 3000);
+    }
+  };
+  
+  const handleVoiceMessage = async (voiceText: string) => {
+    // Show AI is typing indicator
+    setIsTyping(true);
+    
+    try {
+      // Send message to API
+      const response = await elderCareApi.sendMessage(voiceText);
+      
+      if (response.status === 'success') {
+        // Add AI response to conversation
+        const aiMessage = {text: response.response, sender: 'ai', speaking: true};
+        setConversation(prev => [...prev, aiMessage]);
+        
+        // Stop speaking animation after 3 seconds
+        setTimeout(() => {
+          setConversation(prev => 
+            prev.map(msg => 
+              msg === aiMessage ? {...msg, speaking: false} : msg
+            )
+          );
+        }, 3000);
+      } else {
+        throw new Error(response.message || "Erreur lors du traitement du message vocal");
+      }
+    } catch (error) {
+      console.error('Erreur lors du traitement du message vocal:', error);
+      
+      // Add error message
+      let errorMessage = "Désolé, je n'ai pas pu traiter votre message vocal. Veuillez réessayer plus tard.";
+      
+      if (error instanceof Error) {
+        errorMessage = error.message;
+      }
+      
+      setConversation(prev => [...prev, {
+        text: errorMessage,
+        sender: 'ai'
+      }]);
+    } finally {
+      setIsTyping(false);
+    }
+  };
+
+  const retryInitialization = async () => {
+    setInitializationError(null);
+    setIsTyping(true);
+    
+    try {
+      const initResult = await elderCareApi.initializeAssistant();
+      setApiInitialized(initResult.status === 'success');
+      
+      if (initResult.status !== 'success') {
+        setInitializationError(initResult.message || 'Erreur d\'initialisation');
+      } else {
+        // Add success message
+        setConversation(prev => [...prev, {
+          text: "Je suis maintenant connecté et prêt à vous aider !",
+          sender: 'ai'
+        }]);
+      }
+    } catch (error) {
+      console.error('Erreur lors de la reconnexion à l\'API:', error);
+      setInitializationError('Impossible de se connecter à l\'API ElderCare');
+    } finally {
+      setIsTyping(false);
     }
   };
 
@@ -127,6 +274,14 @@ function App() {
         </div>
         <h1>ElderCare</h1>
         <p className="app-subtitle">Assistant IA pour le soin des personnes âgées</p>
+        {initializationError && (
+          <div className="error-banner">
+            {initializationError}
+            <button onClick={retryInitialization} className="retry-button">
+              Réessayer
+            </button>
+          </div>
+        )}
       </div>
       
       <div className="chat-container">
@@ -165,6 +320,7 @@ function App() {
             className="floating-voice-button" 
             onClick={toggleRecording}
             aria-label="Activer l'assistant vocal"
+            disabled={isTyping || !apiInitialized}
           >
             <div className="indicator-dot"></div>
             <div className="floating-voice-ripple"></div>
@@ -185,14 +341,14 @@ function App() {
             onChange={(e) => setMessage(e.target.value)}
             placeholder="Écrivez votre message ici..."
             className="message-input"
-            disabled={isTyping}
+            disabled={isTyping || !apiInitialized}
           />
           <button 
             type="button" 
             className={`voice-button ${isRecording ? 'recording' : ''}`}
             onClick={toggleRecording}
             aria-label="Enregistrer un message vocal"
-            disabled={isTyping}
+            disabled={isTyping || !apiInitialized}
           >
             <div className="voice-waves-container">
               <div className="voice-wave"></div>
@@ -207,7 +363,7 @@ function App() {
               <path d="M8 22H16" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
             </svg>
           </button>
-          <button type="submit" className="send-button" disabled={message.trim() === '' || isTyping}>
+          <button type="submit" className="send-button" disabled={message.trim() === '' || isTyping || !apiInitialized}>
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
               <path d="M22 2L11 13" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
               <path d="M22 2L15 22L11 13L2 9L22 2Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>

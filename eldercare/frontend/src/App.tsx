@@ -2,11 +2,18 @@ import React, { useState, useEffect, useRef } from 'react';
 import './App.css';
 import elderCareApi from './services/eldercare-api';
 
+// Interface pour le SpeechRecognition et SpeechSynthesis
+interface Window {
+  webkitSpeechRecognition: any;
+  SpeechRecognition: any;
+  speechSynthesis: SpeechSynthesis;
+}
+
+declare var window: Window;
+
 function App() {
   const [message, setMessage] = useState('');
-  const [conversation, setConversation] = useState<{text: string, sender: string, speaking?: boolean}[]>([
-    {text: "Bonjour, je suis votre assistant ElderCare. Comment puis-je vous aider aujourd'hui?", sender: 'ai', speaking: false}
-  ]);
+  const [conversation, setConversation] = useState<{text: string, sender: string, speaking?: boolean}[]>([]);
   const [isRecording, setIsRecording] = useState(false);
   const conversationEndRef = useRef<HTMLDivElement>(null);
   const [isTyping, setIsTyping] = useState(false);
@@ -15,9 +22,29 @@ function App() {
   const [initializationError, setInitializationError] = useState<string | null>(null);
   const [retryCount, setRetryCount] = useState(0);
   const maxRetries = 3;
+  
+  // Référence pour la reconnaissance vocale
+  const recognitionRef = useRef<any>(null);
+  // Référence pour la synthèse vocale
+  const speechSynthesisRef = useRef<SpeechSynthesis | null>(null);
+
+  // Initialiser le service de synthèse vocale
+  useEffect(() => {
+    speechSynthesisRef.current = window.speechSynthesis;
+    return () => {
+      if (speechSynthesisRef.current && speechSynthesisRef.current.speaking) {
+        speechSynthesisRef.current.cancel();
+      }
+    };
+  }, []);
 
   // Initialiser l'API au chargement
   useEffect(() => {
+    // Message initial uniquement au premier chargement
+    setConversation([
+      {text: "Bonjour, je suis votre assistant ElderCare. Comment puis-je vous aider aujourd'hui?", sender: 'ai', speaking: false}
+    ]);
+    
     const initializeApi = async () => {
       try {
         setIsTyping(true);
@@ -66,6 +93,104 @@ function App() {
     
     return () => clearInterval(retryInterval);
   }, [apiInitialized, retryCount]);
+
+  // Initialization for Speech Recognition
+  useEffect(() => {
+    // Vérifier la disponibilité de l'API Speech Recognition
+    if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
+      console.warn("La reconnaissance vocale n'est pas prise en charge par ce navigateur.");
+      return;
+    }
+
+    // Créer l'instance de reconnaissance vocale
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    const recognition = new SpeechRecognition();
+    
+    recognition.continuous = false;
+    recognition.interimResults = false;
+    recognition.lang = 'fr-FR';
+    
+    recognition.onstart = () => {
+      setIsRecording(true);
+      console.log('Reconnaissance vocale démarrée...');
+    };
+    
+    recognition.onresult = (event: any) => {
+      const transcript = event.results[0][0].transcript;
+      console.log('Résultat:', transcript);
+      setConversation(prev => [...prev, {text: transcript, sender: 'user'}]);
+      handleVoiceMessage(transcript);
+    };
+    
+    recognition.onerror = (event: any) => {
+      console.error('Erreur de reconnaissance vocale:', event.error);
+      setIsRecording(false);
+    };
+    
+    recognition.onend = () => {
+      setIsRecording(false);
+      console.log('Reconnaissance vocale terminée');
+    };
+    
+    // Sauvegarder la référence
+    recognitionRef.current = recognition;
+    
+    // Cleanup
+    return () => {
+      if (recognitionRef.current) {
+        try {
+          recognitionRef.current.stop();
+        } catch (e) {
+          // Ignorer l'erreur si déjà arrêté
+        }
+      }
+    };
+  }, []);
+
+  // Fonction pour synthétiser la parole
+  const speakText = (text: string) => {
+    if (!speechSynthesisRef.current) {
+      console.error('La synthèse vocale n\'est pas disponible');
+      return;
+    }
+    
+    // Arrêter toute synthèse vocale en cours
+    if (speechSynthesisRef.current.speaking) {
+      speechSynthesisRef.current.cancel();
+    }
+    
+    const utterance = new SpeechSynthesisUtterance(text);
+    utterance.lang = 'fr-FR';
+    utterance.rate = 1.0;
+    utterance.pitch = 1.0;
+    
+    // Trouver une voix française
+    const voices = speechSynthesisRef.current.getVoices();
+    const frenchVoice = voices.find(voice => voice.lang.includes('fr'));
+    if (frenchVoice) {
+      utterance.voice = frenchVoice;
+    }
+    
+    utterance.onstart = () => {
+      // Mettre à jour l'état pour indiquer que le message est en train d'être lu
+      setConversation(prev => 
+        prev.map(msg => 
+          msg.text === text && msg.sender === 'ai' ? {...msg, speaking: true} : msg
+        )
+      );
+    };
+    
+    utterance.onend = () => {
+      // Mettre à jour l'état pour indiquer que le message n'est plus en train d'être lu
+      setConversation(prev => 
+        prev.map(msg => 
+          msg.text === text && msg.sender === 'ai' ? {...msg, speaking: false} : msg
+        )
+      );
+    };
+    
+    speechSynthesisRef.current.speak(utterance);
+  };
 
   // Scroll to bottom of conversation when messages are added
   useEffect(() => {
@@ -122,14 +247,8 @@ function App() {
         const aiMessage = {text: response.response, sender: 'ai', speaking: true};
         setConversation(prev => [...prev, aiMessage]);
         
-        // Stop speaking animation after 3 seconds
-        setTimeout(() => {
-          setConversation(prev => 
-            prev.map(msg => 
-              msg === aiMessage ? {...msg, speaking: false} : msg
-            )
-          );
-        }, 3000);
+        // Lire la réponse à voix haute
+        speakText(response.response);
         
         // If API was not initialized before, it is now
         if (!apiInitialized) {
@@ -168,20 +287,25 @@ function App() {
   };
 
   const toggleRecording = () => {
-    setIsRecording(!isRecording);
+    if (!recognitionRef.current) {
+      console.error('La reconnaissance vocale n\'est pas disponible');
+      return;
+    }
     
-    if (!isRecording) {
-      // Simulate recording ending after 3 seconds
-      setTimeout(() => {
-        setIsRecording(false);
-        
-        // Add simulated voice message from user
-        const voiceMessage = "Voici mon message vocal pour l'assistant...";
-        setConversation(prev => [...prev, {text: voiceMessage, sender: 'user'}]);
-        
-        // Process message as if it was typed
-        handleVoiceMessage(voiceMessage);
-      }, 3000);
+    if (isRecording) {
+      // Arrêter l'enregistrement
+      try {
+        recognitionRef.current.stop();
+      } catch (e) {
+        console.error('Erreur lors de l\'arrêt de la reconnaissance vocale:', e);
+      }
+    } else {
+      // Démarrer l'enregistrement
+      try {
+        recognitionRef.current.start();
+      } catch (e) {
+        console.error('Erreur lors du démarrage de la reconnaissance vocale:', e);
+      }
     }
   };
   
@@ -198,14 +322,8 @@ function App() {
         const aiMessage = {text: response.response, sender: 'ai', speaking: true};
         setConversation(prev => [...prev, aiMessage]);
         
-        // Stop speaking animation after 3 seconds
-        setTimeout(() => {
-          setConversation(prev => 
-            prev.map(msg => 
-              msg === aiMessage ? {...msg, speaking: false} : msg
-            )
-          );
-        }, 3000);
+        // Lire la réponse à voix haute
+        speakText(response.response);
       } else {
         throw new Error(response.message || "Erreur lors du traitement du message vocal");
       }
